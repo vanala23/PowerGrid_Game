@@ -1,12 +1,14 @@
 package controller;
 
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-@Log
+@Slf4j
 public abstract class BaseGame{
     protected JPanel view;
     private Timer timer;
@@ -28,7 +30,7 @@ public abstract class BaseGame{
     }
 
     abstract public void update();
-    abstract public void draw();
+    abstract public void draw(Graphics2D g2d);
     abstract public void mouseClicked(MouseEvent e);
     abstract public void mouseDown(MouseEvent e);
     abstract public void mouseRelease(MouseEvent e);

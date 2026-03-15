@@ -14,7 +14,7 @@ public class App{
 
         JFrame frame = new JFrame();
         frame.setTitle("2d-Game Template");
-        frame.setSize(400, 400);
+        frame.setSize(640, 640);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.add(view);
