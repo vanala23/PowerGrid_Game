@@ -13,7 +13,7 @@ public class App{
         view.setFocusable(true);
 
         JFrame frame = new JFrame();
-        frame.setTitle("2d-Game Template");
+        frame.setTitle("Power Game");
         frame.setSize(640, 640);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
