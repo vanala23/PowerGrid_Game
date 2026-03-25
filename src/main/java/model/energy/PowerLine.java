@@ -1,9 +1,11 @@
-package model;
+package model.energy;
+
+import model.GridObject;
 
 import java.awt.*;
 
-public class PowerLine extends GridObject{
-    private GridObject start, end;
+public class PowerLine extends GridObject {
+    private final GridObject start, end;
 
     public PowerLine(GridObject start, GridObject end){
         super(-1,-1);

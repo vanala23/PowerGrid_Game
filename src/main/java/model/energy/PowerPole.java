@@ -1,8 +1,10 @@
-package model;
+package model.energy;
+
+import model.GridObject;
 
 import java.awt.*;
 
-public class PowerPole extends GridObject{
+public class PowerPole extends GridObject {
     public PowerPole(int x, int y){
         super(x, y);
     }

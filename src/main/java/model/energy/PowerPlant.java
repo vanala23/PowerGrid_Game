@@ -1,8 +1,10 @@
-package model;
+package model.energy;
+
+import model.GridObject;
 
 import java.awt.*;
 
-public class PowerPlant extends GridObject{
+public class PowerPlant extends GridObject {
     private double maxPower; // MegaWatt
     private double currentOutput;
 

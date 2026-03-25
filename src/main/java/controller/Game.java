@@ -2,6 +2,11 @@ package controller;
 
 import lombok.extern.slf4j.Slf4j;
 import model.*;
+import model.energy.PowerLine;
+import model.energy.PowerPlant;
+import model.energy.PowerPole;
+import model.energy.Transformer;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
