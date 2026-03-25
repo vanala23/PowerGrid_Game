@@ -1,8 +1,10 @@
-package model;
+package model.energy;
+
+import model.GridObject;
 
 import java.awt.*;
 
-public class Transformer extends GridObject{
+public class Transformer extends GridObject {
     private double efficiency;
     private int level = 1;
 
