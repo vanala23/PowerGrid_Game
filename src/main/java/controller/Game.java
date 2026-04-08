@@ -6,6 +6,7 @@ import model.energy.PowerLine;
 import model.energy.PowerPlant;
 import model.energy.PowerPole;
 import model.energy.Transformer;
+import view.HoverTextBox;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -16,6 +17,9 @@ import java.util.Random;
 public class Game extends BaseGame{
     private final int gridWidth = 20, gridHeight = 20;
     private final int tileSize = 32;
+
+    private GridObject hoveredObject;
+    private HoverTextBox hoverTextBox;
 
     private Grid grid;
 
@@ -32,6 +36,9 @@ public class Game extends BaseGame{
         grid.addObject(new PowerPlant(1, 1, 100));
         grid.addObject(new House(5, 5));
         grid.addObject(new House(6, 5));
+
+        hoverTextBox = new HoverTextBox("");
+        hoverTextBox.setVisible(false);
     }
 
     @Override
@@ -50,6 +57,8 @@ public class Game extends BaseGame{
         }
 
         grid.drawAll(g2d);
+        if(hoverTextBox != null)
+            hoverTextBox.draw(g2d);
     }
 
     @Override
@@ -82,6 +91,27 @@ public class Game extends BaseGame{
             case TRANSFORMER: if(objAtPos == null) grid.addObject(new Transformer(gx, gy));
             case HOUSE: if(objAtPos == null) grid.addObject(new House(gx, gy));
         }
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e){
+        int gx = e.getX() / tileSize;
+        int gy = e.getY() / tileSize;
+
+        hoveredObject = grid.getObjectAt(gx, gy);
+
+        if(hoveredObject != null){
+            hoverTextBox.text = hoveredObject.getClass().getSimpleName();
+            hoverTextBox.setVisible(true);
+            hoverTextBox.updatePosition(e.getX(), e.getY());
+        }else{
+            hoverTextBox.setVisible(false);
+        }
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e){
+
     }
 
     @Override
