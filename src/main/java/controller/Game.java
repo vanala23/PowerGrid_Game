@@ -71,7 +71,11 @@ public class Game extends BaseGame{
                         firstSelectedObject = objAtPos;
                     }else{
                         if(firstSelectedObject != objAtPos){
-                            grid.addObject(new PowerLine(firstSelectedObject, objAtPos));
+                            try{
+                                grid.addObject(new PowerLine(firstSelectedObject, objAtPos));
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
                         }
                         firstSelectedObject = null;
                     }
