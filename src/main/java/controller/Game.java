@@ -117,6 +117,11 @@ public class Game extends BaseGame{
                             GridObject placed = new PowerLine(firstSelectedObject, objAtPos);
                             grid.addObject(placed);
                             showTutorialIfFirst(placed);
+                            try{
+                                grid.addObject(new PowerLine(firstSelectedObject, objAtPos));
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
                         }
                         firstSelectedObject = null;
                     }
