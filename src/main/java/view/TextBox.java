@@ -19,6 +19,7 @@ public abstract class TextBox{
     public void setVisible(boolean visible){
         this.visible = visible;
     }
+    public void setHeight(int height) { this.height = height; }
 
     public boolean isVisible(){
         return visible;

@@ -4,9 +4,11 @@ import model.GridObject;
 
 import java.awt.*;
 
-public class Transformer extends GridObject {
+public class Transformer extends GridObject{
     private double efficiency;
     private int level = 1;
+
+    private final String text = "\nVoltage conversion\nLoss: 5%";
 
     public Transformer(int x, int y){
         super(x, y);
@@ -30,5 +32,10 @@ public class Transformer extends GridObject {
     public void draw(Graphics2D g2d, int tileSize){
         g2d.setColor(Color.BLUE);
         g2d.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+    }
+
+    @Override
+    public String getInfoText(){
+        return text;
     }
 }

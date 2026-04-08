@@ -57,7 +57,7 @@ public class Game extends BaseGame{
         }
 
         grid.drawAll(g2d);
-        if(hoverTextBox != null)
+        if(hoverTextBox != null && !hoverTextBox.getClass().getSimpleName().equals("PowerLine"))
             hoverTextBox.draw(g2d);
     }
 
@@ -101,7 +101,7 @@ public class Game extends BaseGame{
         hoveredObject = grid.getObjectAt(gx, gy);
 
         if(hoveredObject != null){
-            hoverTextBox.text = hoveredObject.getClass().getSimpleName();
+            hoverTextBox.text = hoveredObject.getClass().getSimpleName() + "\n" + hoveredObject.getInfoText();
             hoverTextBox.setVisible(true);
             hoverTextBox.updatePosition(e.getX(), e.getY());
         }else{
