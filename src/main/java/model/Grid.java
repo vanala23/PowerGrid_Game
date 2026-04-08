@@ -30,6 +30,10 @@ public class Grid{
         return null;
     }
 
+    public void deleteObjectAt(int x, int y){
+        objects.removeIf(obj -> obj.x == x && obj.y == y);
+    }
+
     public void updatePower(){
         for(GridObject obj : objects){
             if(obj instanceof House h){
@@ -81,6 +85,9 @@ public class Grid{
     public void update(){
         for(GridObject obj : objects){
             obj.update();
+            if (!obj.isAlive()) {
+                objects.remove(obj);
+            }
         }
     }
 

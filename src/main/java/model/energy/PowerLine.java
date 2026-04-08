@@ -1,11 +1,14 @@
 package model.energy;
 
+import lombok.extern.slf4j.Slf4j;
 import model.GridObject;
 
 import java.awt.*;
+@Slf4j
 
 public class PowerLine extends GridObject {
     private final GridObject start, end;
+    private java.util.List<GridObject> possibleObjects;
 
     public PowerLine(GridObject start, GridObject end) throws Exception {
         super(-1,-1);
@@ -29,7 +32,23 @@ public class PowerLine extends GridObject {
     public GridObject getEnd() { return end; }
 
     @Override
-    public void update(){}
+    public void update(){
+        log.info("Updating power line");
+        log.info(start.toString());
+        if (!possibleObjects.isEmpty()){
+            for (GridObject o : possibleObjects) {
+                if (o.getX() == start.getX() && o.getY() == start.getY() && !isAlive) {
+                    isAlive = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    // Finish the deletion of Powerlines
+    public void setPossibleObjects(java.util.List<GridObject> objectList){
+        this.possibleObjects = objectList;
+    }
 
     @Override
     public void draw(Graphics2D g, int tileSize){
