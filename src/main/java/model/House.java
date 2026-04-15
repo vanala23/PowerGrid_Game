@@ -48,4 +48,21 @@ public class House extends GridObject{
                through the power grid.
                """;
     }
+
+    @Override
+    public String getTutorialText(){
+        return """
+               HOUSE
+
+               A house is an electrical consumer.
+
+               It needs electrical energy
+               from the power grid.
+
+               Formula:
+               P = U * I
+
+               Power = Voltage × Current
+               """;
+    }
 }

@@ -51,4 +51,19 @@ public class Transformer extends GridObject{
                P_loss = I² * R
                """;
     }
+
+    @Override
+    public String getTutorialText(){
+        return """
+               TRANSFORMER
+                
+               Transforms voltage levels.
+               
+               High voltage reduces current
+               and therefore energy losses.
+               
+               Power loss:
+               P_loss = I² * R
+               """;
+    }
 }

@@ -34,4 +34,21 @@ public class PowerLine extends GridObject{
     public String getInfoTextBoxText(){
         return "";
     }
+
+    @Override
+    public String getTutorialText(){
+        return """
+               HOUSE
+
+               A house is an electrical consumer.
+
+               It needs electrical energy
+               from the power grid.
+
+               Formula:
+               P = U * I
+
+               Power = Voltage × Current
+               """;
+    }
 }

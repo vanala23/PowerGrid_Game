@@ -19,4 +19,5 @@ public abstract class GridObject{
 
     public abstract String getInfoText();
     public abstract String getInfoTextBoxText();
+    public abstract String getTutorialText();
 }
