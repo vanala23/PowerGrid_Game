@@ -29,4 +29,9 @@ public class PowerLine extends GridObject{
     public String getInfoText(){
         return "";
     }
+
+    @Override
+    public String getInfoTextBoxText(){
+        return "";
+    }
 }

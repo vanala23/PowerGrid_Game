@@ -7,6 +7,7 @@ import model.energy.PowerPlant;
 import model.energy.PowerPole;
 import model.energy.Transformer;
 import view.HoverTextBox;
+import view.InfoTextBox;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -20,10 +21,11 @@ public class Game extends BaseGame{
 
     private GridObject hoveredObject;
     private HoverTextBox hoverTextBox;
+    private InfoTextBox infoTextBox;
 
     private Grid grid;
 
-    private enum BuildMode { POWER_PLANT, TRANSFORMER, HOUSE, POWER_POLE, POWER_LINE }
+    private enum BuildMode { POWER_PLANT, TRANSFORMER, HOUSE, POWER_POLE, POWER_LINE, NONE }
     private BuildMode buildMode = BuildMode.POWER_POLE;
     private GridObject firstSelectedObject = null;
 
@@ -39,6 +41,7 @@ public class Game extends BaseGame{
 
         hoverTextBox = new HoverTextBox("");
         hoverTextBox.setVisible(false);
+        infoTextBox = new InfoTextBox("");
     }
 
     @Override
@@ -59,6 +62,9 @@ public class Game extends BaseGame{
         grid.drawAll(g2d);
         if(hoverTextBox != null && !hoverTextBox.getClass().getSimpleName().equals("PowerLine"))
             hoverTextBox.draw(g2d);
+
+        if(infoTextBox != null && (!infoTextBox.getClass().getSimpleName().equals("PowerLine") || !infoTextBox.getClass().getSimpleName().equals("PowerPole")))
+            infoTextBox.draw(g2d);
     }
 
     @Override
@@ -90,6 +96,17 @@ public class Game extends BaseGame{
             case POWER_PLANT: if(objAtPos == null) grid.addObject(new PowerPlant(gx, gy, 100));
             case TRANSFORMER: if(objAtPos == null) grid.addObject(new Transformer(gx, gy));
             case HOUSE: if(objAtPos == null) grid.addObject(new House(gx, gy));
+            case NONE:
+                GridObject clickedObject = grid.getObjectAt(gx, gy);
+
+                if(clickedObject != null){
+                    infoTextBox.text = clickedObject.getInfoText();
+                    if(infoTextBox.isVisible()){
+                        infoTextBox.setVisible(false);
+                    }else{
+                        infoTextBox.setVisible(true);
+                    }
+                }
         }
     }
 
@@ -128,6 +145,7 @@ public class Game extends BaseGame{
             case KeyEvent.VK_3 -> {buildMode = BuildMode.POWER_PLANT; log.info("Build Power Plant");}
             case KeyEvent.VK_4 -> {buildMode = BuildMode.TRANSFORMER; log.info("Build Transformer");}
             case KeyEvent.VK_5 -> {buildMode = BuildMode.HOUSE; log.info("Build House");}
+            case KeyEvent.VK_6 -> {buildMode = BuildMode.NONE; log.info("NONE");}
         }
     }
 }

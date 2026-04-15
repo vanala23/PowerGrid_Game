@@ -24,4 +24,9 @@ public class PowerPole extends GridObject{
     public String getInfoText(){
         return text;
     }
+
+    @Override
+    public String getInfoTextBoxText() {
+        return "";
+    }
 }

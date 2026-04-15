@@ -38,4 +38,17 @@ public class Transformer extends GridObject{
     public String getInfoText(){
         return text;
     }
+
+    @Override
+    public String getInfoTextBoxText(){
+        return """
+               TRANSFORMER
+               Voltage converter
+               
+               Higher voltage reduces
+               transmission losses.
+               
+               P_loss = I² * R
+               """;
+    }
 }
