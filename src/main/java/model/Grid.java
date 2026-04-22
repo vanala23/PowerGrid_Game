@@ -31,6 +31,7 @@ public class Grid{
     }
 
     public void deleteObjectAt(int x, int y){
+        getObjectAt(x,y).isAlive = false;
         objects.removeIf(obj -> obj.x == x && obj.y == y);
     }
 
@@ -84,10 +85,11 @@ public class Grid{
 
     public void update(){
         for(GridObject obj : objects){
-            obj.update();
             if (!obj.isAlive()) {
                 objects.remove(obj);
+                break;
             }
+            obj.update();
         }
     }
 
