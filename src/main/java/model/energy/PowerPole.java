@@ -29,4 +29,17 @@ public class PowerPole extends GridObject{
     public String getInfoTextBoxText() {
         return "";
     }
+
+    @Override
+    public String getTutorialText(){
+        return """
+               POWER POLE
+                
+               Transfers electricity
+               across the power grid.
+                
+               Used to connect consumers
+               and transformers.
+               """;
+    }
 }

@@ -32,9 +32,14 @@ public abstract class GridObject{
         return currentPower;
     }
 
+    public boolean isAlive(){
+        return isAlive;
+    }
+
     public abstract void update();
     public abstract void draw(Graphics2D g2d, int tileSize);
 
     public abstract String getInfoText();
     public abstract String getInfoTextBoxText();
+    public abstract String getTutorialText();
 }

@@ -34,6 +34,11 @@ public class Grid{
         return null;
     }
 
+    public void deleteObjectAt(int x, int y){
+        getObjectAt(x,y).isAlive = false;
+        objects.removeIf(obj -> obj.x == x && obj.y == y);
+    }
+
     public void updatePower(){
 
         for(GridObject obj : objects){
@@ -128,6 +133,10 @@ public class Grid{
 
     public void update(){
         for(GridObject obj : objects){
+            if (!obj.isAlive()) {
+                objects.remove(obj);
+                break;
+            }
             obj.update();
         }
     }

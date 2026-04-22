@@ -13,6 +13,7 @@ import java.util.Random;
 public class Game extends BaseGame{
     private final int gridWidth = 20, gridHeight = 20;
     private final int tileSize = 32;
+    private boolean paused = false;
 
     private Grid grid;
 
@@ -33,6 +34,8 @@ public class Game extends BaseGame{
 
     @Override
     public void update(){
+        if(paused) return;
+
         grid.update();
         grid.updatePower();
     }
@@ -51,6 +54,12 @@ public class Game extends BaseGame{
 
     @Override
     public void mouseClicked(MouseEvent e){
+        if(paused){
+            tutorialTextBox.setVisible(false);
+            paused = false;
+            return;
+        }
+
         int gx = e.getX() / tileSize;
         int gy = e.getY() / tileSize;
         if(gx < 0 || gy < 0 || gx >= gridWidth || gy >= gridHeight) return;
@@ -58,22 +67,30 @@ public class Game extends BaseGame{
         GridObject objAtPos = grid.getObjectAt(gx, gy);
 
         switch(buildMode){
-            case POWER_POLE:
-                if(objAtPos == null) grid.addObject(new PowerPole(gx, gy));
-                break;
+            case POWER_POLE -> {
+                if(objAtPos == null){
+                    GridObject placed = new PowerPole(gx, gy);
+                    grid.addObject(placed);
+                    showTutorialIfFirst(placed);
+                }
+            }
 
-            case POWER_LINE:
+            case POWER_LINE -> {
                 if(objAtPos != null){
                     if(firstSelectedObject == null){
                         firstSelectedObject = objAtPos;
                     }else{
                         if(firstSelectedObject != objAtPos){
-                            grid.addObject(new PowerLine(firstSelectedObject, objAtPos));
+                            try{
+                                grid.addObject(new PowerLine(firstSelectedObject, objAtPos));
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
                         }
                         firstSelectedObject = null;
                     }
                 }
-                break;
+            }
 
             case POWER_PLANT: if(objAtPos == null) grid.addObject(new PowerPlant(gx, gy, 100));
             case TRANSFORMER: if(objAtPos == null) grid.addObject(new Transformer(gx, gy));

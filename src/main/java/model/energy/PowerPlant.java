@@ -43,4 +43,18 @@ public class PowerPlant extends GridObject{
                Converts energy into electricity.
                """;
     }
+
+    @Override
+    public String getTutorialText(){
+        return """
+               POWER PLANT
+                
+               Converts energy into electricity.
+                
+               Examples:
+               Wind -> electrical
+               Coal -> thermal -> electrical
+               Nuclear -> heat -> electrical
+               """;
+    }
 }
