@@ -35,7 +35,7 @@ public class Game extends BaseGame{
 
     private Grid grid;
 
-    private enum BuildMode { POWER_PLANT, TRANSFORMER, HOUSE, POWER_POLE, POWER_LINE, NONE }
+    private enum BuildMode { POWER_PLANT, TRANSFORMER, HOUSE, POWER_POLE, POWER_LINE, DELETE }
     private BuildMode buildMode = BuildMode.POWER_POLE;
     private GridObject firstSelectedObject = null;
 
@@ -114,9 +114,11 @@ public class Game extends BaseGame{
                         firstSelectedObject = objAtPos;
                     }else{
                         if(firstSelectedObject != objAtPos){
-                            GridObject placed = new PowerLine(firstSelectedObject, objAtPos);
-                            grid.addObject(placed);
-                            showTutorialIfFirst(placed);
+                            try{
+                                grid.addObject(new PowerLine(firstSelectedObject, objAtPos));
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
                         }
                         firstSelectedObject = null;
                     }
@@ -162,23 +164,10 @@ public class Game extends BaseGame{
         }
     }
 
-    private boolean canShowInfo(GridObject obj){
-        return !(obj instanceof PowerLine) && !(obj instanceof PowerPole);
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e){
-        int gx = e.getX() / tileSize;
-        int gy = e.getY() / tileSize;
-
-        hoveredObject = grid.getObjectAt(gx, gy);
-
-        if(hoveredObject != null){
-            hoverTextBox.text = hoveredObject.getClass().getSimpleName() + "\n" + hoveredObject.getInfoText();
-            hoverTextBox.setVisible(true);
-            hoverTextBox.updatePosition(e.getX(), e.getY());
-        }else{
-            hoverTextBox.setVisible(false);
+            case POWER_PLANT: if(objAtPos == null) grid.addObject(new PowerPlant(gx, gy, 100));
+            case TRANSFORMER: if(objAtPos == null) grid.addObject(new Transformer(gx, gy));
+            case HOUSE: if(objAtPos == null) grid.addObject(new House(gx, gy));
+            case DELETE: if(objAtPos != null) grid.deleteObjectAt(gx, gy);
         }
     }
 
@@ -201,44 +190,7 @@ public class Game extends BaseGame{
             case KeyEvent.VK_3 -> {buildMode = BuildMode.POWER_PLANT; log.info("Build Power Plant");}
             case KeyEvent.VK_4 -> {buildMode = BuildMode.TRANSFORMER; log.info("Build Transformer");}
             case KeyEvent.VK_5 -> {buildMode = BuildMode.HOUSE; log.info("Build House");}
-            case KeyEvent.VK_6 -> {buildMode = BuildMode.NONE; log.info("NONE");}
-        }
-    }
-
-    private void showTutorialIfFirst(GridObject obj){
-        if(obj instanceof PowerPlant && !powerPlantTutorialShown){
-            tutorialTextBox.text = obj.getTutorialText();
-            tutorialTextBox.setVisible(true);
-            powerPlantTutorialShown = true;
-            paused = true;
-        }
-
-        if(obj instanceof House && !houseTutorialShown){
-            tutorialTextBox.text = obj.getTutorialText();
-            tutorialTextBox.setVisible(true);
-            houseTutorialShown = true;
-            paused = true;
-        }
-
-        if(obj instanceof Transformer && !transformerTutorialShown){
-            tutorialTextBox.text = obj.getTutorialText();
-            tutorialTextBox.setVisible(true);
-            transformerTutorialShown = true;
-            paused = true;
-        }
-
-        if(obj instanceof PowerPole && !poleTutorialShown){
-            tutorialTextBox.text = obj.getTutorialText();
-            tutorialTextBox.setVisible(true);
-            poleTutorialShown = true;
-            paused = true;
-        }
-
-        if(obj instanceof PowerLine && !lineTutorialShown){
-            tutorialTextBox.text = obj.getTutorialText();
-            tutorialTextBox.setVisible(true);
-            lineTutorialShown = true;
-            paused = true;
+            case KeyEvent.VK_6 -> {buildMode = BuildMode.DELETE; log.info("Build Delete");}
         }
     }
 }
