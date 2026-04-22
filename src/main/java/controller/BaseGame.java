@@ -34,5 +34,7 @@ public abstract class BaseGame{
     abstract public void mouseClicked(MouseEvent e);
     abstract public void mouseDown(MouseEvent e);
     abstract public void mouseRelease(MouseEvent e);
+    abstract public void mouseMoved(MouseEvent e);
+    abstract public void mouseDragged(MouseEvent e);
     abstract public void keyPressed(KeyEvent e);
 }
