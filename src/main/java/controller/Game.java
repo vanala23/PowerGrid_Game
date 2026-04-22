@@ -2,6 +2,8 @@ package controller;
 
 import lombok.extern.slf4j.Slf4j;
 import model.*;
+import model.energy.PowerPlant;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -73,17 +75,9 @@ public class Game extends BaseGame{
                 }
                 break;
 
-            case POWER_PLANT:
-                if(objAtPos == null) grid.addObject(new PowerPlant(gx, gy, 100));
-                break;
-
-            case TRANSFORMER:
-                if(objAtPos == null) grid.addObject(new Transformer(gx, gy));
-                break;
-
-            case HOUSE:
-                if(objAtPos == null) grid.addObject(new House(gx, gy));
-                break;
+            case POWER_PLANT: if(objAtPos == null) grid.addObject(new PowerPlant(gx, gy, 100));
+            case TRANSFORMER: if(objAtPos == null) grid.addObject(new Transformer(gx, gy));
+            case HOUSE: if(objAtPos == null) grid.addObject(new House(gx, gy));
         }
     }
 
@@ -94,6 +88,16 @@ public class Game extends BaseGame{
     public void mouseRelease(MouseEvent e){}
 
     @Override
+    public void mouseMoved(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
     public void keyPressed(KeyEvent e){
         switch(e.getKeyCode()) {
             case KeyEvent.VK_1 -> {buildMode = BuildMode.POWER_POLE; log.info("Build Power Pole");}
@@ -102,9 +106,5 @@ public class Game extends BaseGame{
             case KeyEvent.VK_4 -> {buildMode = BuildMode.TRANSFORMER; log.info("Build Transformer");}
             case KeyEvent.VK_5 -> {buildMode = BuildMode.HOUSE; log.info("Build House");}
         }
-    }
-
-    public String getBuildModeName(){
-        return buildMode.name();
     }
 }

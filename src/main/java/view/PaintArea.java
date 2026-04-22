@@ -6,10 +6,7 @@ import lombok.extern.java.Log;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 
 @Log
 public class PaintArea extends JPanel{
@@ -44,6 +41,14 @@ public class PaintArea extends JPanel{
 
             @Override
             public void mouseExited(MouseEvent e){}
+        });
+
+        addMouseMotionListener(new MouseMotionListener(){
+            @Override
+            public void mouseDragged(MouseEvent e) { model.mouseDragged(e);}
+
+            @Override
+            public void mouseMoved(MouseEvent e) { model.mouseMoved(e);}
         });
 
         addKeyListener(new KeyListener(){
