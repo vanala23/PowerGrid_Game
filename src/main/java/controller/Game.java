@@ -19,6 +19,7 @@ import java.util.Random;
 public class Game extends BaseGame{
     private final int gridWidth = 20, gridHeight = 20;
     private final int tileSize = 32;
+    private boolean paused = false;
 
     private GridObject hoveredObject;
     private GridObject selectedObject;
@@ -57,6 +58,8 @@ public class Game extends BaseGame{
 
     @Override
     public void update(){
+        if(paused) return;
+
         grid.update();
         grid.updatePower();
     }
@@ -84,6 +87,12 @@ public class Game extends BaseGame{
 
     @Override
     public void mouseClicked(MouseEvent e){
+        if(paused){
+            tutorialTextBox.setVisible(false);
+            paused = false;
+            return;
+        }
+
         int gx = e.getX() / tileSize;
         int gy = e.getY() / tileSize;
         if(gx < 0 || gy < 0 || gx >= gridWidth || gy >= gridHeight) return;
@@ -201,30 +210,35 @@ public class Game extends BaseGame{
             tutorialTextBox.text = obj.getTutorialText();
             tutorialTextBox.setVisible(true);
             powerPlantTutorialShown = true;
+            paused = true;
         }
 
         if(obj instanceof House && !houseTutorialShown){
             tutorialTextBox.text = obj.getTutorialText();
             tutorialTextBox.setVisible(true);
             houseTutorialShown = true;
+            paused = true;
         }
 
         if(obj instanceof Transformer && !transformerTutorialShown){
             tutorialTextBox.text = obj.getTutorialText();
             tutorialTextBox.setVisible(true);
             transformerTutorialShown = true;
+            paused = true;
         }
 
         if(obj instanceof PowerPole && !poleTutorialShown){
             tutorialTextBox.text = obj.getTutorialText();
             tutorialTextBox.setVisible(true);
             poleTutorialShown = true;
+            paused = true;
         }
 
         if(obj instanceof PowerLine && !lineTutorialShown){
             tutorialTextBox.text = obj.getTutorialText();
             tutorialTextBox.setVisible(true);
             lineTutorialShown = true;
+            paused = true;
         }
     }
 }
