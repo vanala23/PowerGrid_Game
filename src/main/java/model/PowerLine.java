@@ -9,6 +9,9 @@ public class PowerLine extends GridObject{
         super(-1,-1);
         this.start = start;
         this.end = end;
+
+        this.start.addConnection(end);
+        this.end.addConnection(start);
     }
 
     public GridObject getStart() { return start; }

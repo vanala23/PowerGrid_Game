@@ -73,9 +73,17 @@ public class Game extends BaseGame{
                 }
                 break;
 
-            case POWER_PLANT: if(objAtPos == null) grid.addObject(new PowerPlant(gx, gy, 100));
-            case TRANSFORMER: if(objAtPos == null) grid.addObject(new Transformer(gx, gy));
-            case HOUSE: if(objAtPos == null) grid.addObject(new House(gx, gy));
+            case POWER_PLANT:
+                if(objAtPos == null) grid.addObject(new PowerPlant(gx, gy, 100));
+                break;
+
+            case TRANSFORMER:
+                if(objAtPos == null) grid.addObject(new Transformer(gx, gy));
+                break;
+
+            case HOUSE:
+                if(objAtPos == null) grid.addObject(new House(gx, gy));
+                break;
         }
     }
 
@@ -94,5 +102,9 @@ public class Game extends BaseGame{
             case KeyEvent.VK_4 -> {buildMode = BuildMode.TRANSFORMER; log.info("Build Transformer");}
             case KeyEvent.VK_5 -> {buildMode = BuildMode.HOUSE; log.info("Build House");}
         }
+    }
+
+    public String getBuildModeName(){
+        return buildMode.name();
     }
 }
