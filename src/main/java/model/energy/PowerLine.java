@@ -6,7 +6,7 @@ import model.GridObject;
 import java.awt.*;
 @Slf4j
 
-public class PowerLine extends GridObject {
+public class PowerLine extends GridObject{
     private final GridObject start, end;
     private java.util.List<GridObject> possibleObjects;
 
@@ -49,5 +49,32 @@ public class PowerLine extends GridObject {
     public void draw(Graphics2D g, int tileSize){
         g.setColor(Color.LIGHT_GRAY);
         g.drawLine(start.getX() * tileSize + tileSize/2, start.getY() * tileSize + tileSize/2, end.getX() * tileSize + tileSize/2, end.getY() * tileSize + tileSize/2);
+    }
+
+    @Override
+    public String getInfoText(){
+        return "";
+    }
+
+    @Override
+    public String getInfoTextBoxText(){
+        return "";
+    }
+
+    @Override
+    public String getTutorialText(){
+        return """
+               HOUSE
+
+               A house is an electrical consumer.
+
+               It needs electrical energy
+               from the power grid.
+
+               Formula:
+               P = U * I
+
+               Power = Voltage × Current
+               """;
     }
 }
