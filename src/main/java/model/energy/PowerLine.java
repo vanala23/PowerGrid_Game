@@ -35,13 +35,8 @@ public class PowerLine extends GridObject {
     public void update(){
         log.info("Updating power line");
         log.info(start.toString());
-        if (!possibleObjects.isEmpty()){
-            for (GridObject o : possibleObjects) {
-                if (o.getX() == start.getX() && o.getY() == start.getY() && !isAlive) {
-                    isAlive = true;
-                    break;
-                }
-            }
+        if(!start.isAlive() || !end.isAlive()){
+            isAlive = false;
         }
     }
 
