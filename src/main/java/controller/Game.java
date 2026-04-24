@@ -96,6 +96,16 @@ public class Game extends BaseGame{
     public void mouseRelease(MouseEvent e){}
 
     @Override
+    public void mouseMoved(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
     public void keyPressed(KeyEvent e){
         switch(e.getKeyCode()) {
             case KeyEvent.VK_1 -> {buildMode = BuildMode.POWER_POLE; log.info("Build Power Pole");}
