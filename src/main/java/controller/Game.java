@@ -35,8 +35,7 @@ public class Game extends BaseGame{
 
     private Grid grid;
 
-    private enum BuildMode { POWER_PLANT, TRANSFORMER, HOUSE, POWER_POLE, POWER_LINE, DELETE }
-    private enum BuildMode { POWER_PLANT, TRANSFORMER, HOUSE, POWER_POLE, POWER_LINE, NONE }
+    private enum BuildMode { POWER_PLANT, TRANSFORMER, HOUSE, POWER_POLE, POWER_LINE, DELETE, NONE }
     private BuildMode buildMode = BuildMode.POWER_POLE;
     private GridObject firstSelectedObject = null;
 
@@ -115,12 +114,11 @@ public class Game extends BaseGame{
                         firstSelectedObject = objAtPos;
                     }else{
                         if(firstSelectedObject != objAtPos){
-                            GridObject placed = new PowerLine(firstSelectedObject, objAtPos);
-                            grid.addObject(placed);
-                            showTutorialIfFirst(placed);
                             try{
-                                grid.addObject(new PowerLine(firstSelectedObject, objAtPos));
-                            } catch (Exception ex) {
+                                GridObject placed = new PowerLine(firstSelectedObject, objAtPos);
+                                grid.addObject(placed);
+                                showTutorialIfFirst(placed);
+                            }catch(Exception ex){
                                 ex.printStackTrace();
                             }
                         }
@@ -190,10 +188,13 @@ public class Game extends BaseGame{
             hoverTextBox.updatePosition(e.getX(), e.getY());
         }else{
             hoverTextBox.setVisible(false);
+            /*
             case POWER_PLANT: if(objAtPos == null) grid.addObject(new PowerPlant(gx, gy, 100));
             case TRANSFORMER: if(objAtPos == null) grid.addObject(new Transformer(gx, gy));
             case HOUSE: if(objAtPos == null) grid.addObject(new House(gx, gy));
             case DELETE: if(objAtPos != null) grid.deleteObjectAt(gx, gy);
+
+             */
         }
     }
 
@@ -217,7 +218,7 @@ public class Game extends BaseGame{
             case KeyEvent.VK_4 -> {buildMode = BuildMode.TRANSFORMER; log.info("Build Transformer");}
             case KeyEvent.VK_5 -> {buildMode = BuildMode.HOUSE; log.info("Build House");}
             case KeyEvent.VK_6 -> {buildMode = BuildMode.DELETE; log.info("Build Delete");}
-            case KeyEvent.VK_6 -> {buildMode = BuildMode.NONE; log.info("NONE");}
+            case KeyEvent.VK_7 -> {buildMode = BuildMode.NONE; log.info("NONE");}
         }
     }
 
