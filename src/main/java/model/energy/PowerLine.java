@@ -31,11 +31,6 @@ public class PowerLine extends GridObject{
     }
 
     @Override
-    public String getInfoTextBoxText(){
-        return "";
-    }
-
-    @Override
     public String getTutorialText(){
         return """
                HOUSE

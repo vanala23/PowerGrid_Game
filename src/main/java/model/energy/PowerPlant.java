@@ -35,16 +35,6 @@ public class PowerPlant extends GridObject{
     }
 
     @Override
-    public String getInfoTextBoxText(){
-        return """
-               POWER PLANT
-               Output: 100 MW
-               
-               Converts energy into electricity.
-               """;
-    }
-
-    @Override
     public String getTutorialText(){
         return """
                POWER PLANT

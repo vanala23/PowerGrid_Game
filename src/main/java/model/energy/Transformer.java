@@ -40,19 +40,6 @@ public class Transformer extends GridObject{
     }
 
     @Override
-    public String getInfoTextBoxText(){
-        return """
-               TRANSFORMER
-               Voltage converter
-               
-               Higher voltage reduces
-               transmission losses.
-               
-               P_loss = I² * R
-               """;
-    }
-
-    @Override
     public String getTutorialText(){
         return """
                TRANSFORMER
