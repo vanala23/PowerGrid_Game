@@ -6,8 +6,7 @@ import model.energy.PowerLine;
 import model.energy.PowerPlant;
 import model.energy.PowerPole;
 import model.energy.Transformer;
-import view.HoverTextBox;
-import view.InfoTextBox;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -18,13 +17,9 @@ public class Game extends BaseGame{
     private final int gridWidth = 20, gridHeight = 20;
     private final int tileSize = 32;
 
-    private GridObject hoveredObject;
-    private HoverTextBox hoverTextBox;
-    private InfoTextBox infoTextBox;
-
     private Grid grid;
 
-    private enum BuildMode { POWER_PLANT, TRANSFORMER, HOUSE, POWER_POLE, POWER_LINE, NONE }
+    private enum BuildMode { POWER_PLANT, TRANSFORMER, HOUSE, POWER_POLE, POWER_LINE, DELETE }
     private BuildMode buildMode = BuildMode.POWER_POLE;
     private GridObject firstSelectedObject = null;
 
@@ -37,10 +32,6 @@ public class Game extends BaseGame{
         grid.addObject(new PowerPlant(1, 1, 100));
         grid.addObject(new House(5, 5));
         grid.addObject(new House(6, 5));
-
-        hoverTextBox = new HoverTextBox("");
-        hoverTextBox.setVisible(false);
-        infoTextBox = new InfoTextBox("");
     }
 
     @Override
@@ -59,11 +50,6 @@ public class Game extends BaseGame{
         }
 
         grid.drawAll(g2d);
-        if(hoverTextBox != null && !hoverTextBox.getClass().getSimpleName().equals("PowerLine"))
-            hoverTextBox.draw(g2d);
-
-        if(infoTextBox != null && (!infoTextBox.getClass().getSimpleName().equals("PowerLine") || !infoTextBox.getClass().getSimpleName().equals("PowerPole")))
-            infoTextBox.draw(g2d);
     }
 
     @Override
@@ -85,7 +71,11 @@ public class Game extends BaseGame{
                         firstSelectedObject = objAtPos;
                     }else{
                         if(firstSelectedObject != objAtPos){
-                            grid.addObject(new PowerLine(firstSelectedObject, objAtPos));
+                            try{
+                                grid.addObject(new PowerLine(firstSelectedObject, objAtPos));
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
                         }
                         firstSelectedObject = null;
                     }
@@ -95,39 +85,8 @@ public class Game extends BaseGame{
             case POWER_PLANT: if(objAtPos == null) grid.addObject(new PowerPlant(gx, gy, 100));
             case TRANSFORMER: if(objAtPos == null) grid.addObject(new Transformer(gx, gy));
             case HOUSE: if(objAtPos == null) grid.addObject(new House(gx, gy));
-            case NONE:
-                GridObject clickedObject = grid.getObjectAt(gx, gy);
-
-                if(clickedObject != null){
-                    infoTextBox.text = clickedObject.getInfoText();
-                    if(infoTextBox.isVisible()){
-                        infoTextBox.setVisible(false);
-                    }else{
-                        infoTextBox.setVisible(true);
-                    }
-                }
+            case DELETE: if(objAtPos != null) grid.deleteObjectAt(gx, gy);
         }
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e){
-        int gx = e.getX() / tileSize;
-        int gy = e.getY() / tileSize;
-
-        hoveredObject = grid.getObjectAt(gx, gy);
-
-        if(hoveredObject != null){
-            hoverTextBox.text = hoveredObject.getClass().getSimpleName() + "\n" + hoveredObject.getInfoText();
-            hoverTextBox.setVisible(true);
-            hoverTextBox.updatePosition(e.getX(), e.getY());
-        }else{
-            hoverTextBox.setVisible(false);
-        }
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e){
-
     }
 
     @Override
@@ -144,7 +103,7 @@ public class Game extends BaseGame{
             case KeyEvent.VK_3 -> {buildMode = BuildMode.POWER_PLANT; log.info("Build Power Plant");}
             case KeyEvent.VK_4 -> {buildMode = BuildMode.TRANSFORMER; log.info("Build Transformer");}
             case KeyEvent.VK_5 -> {buildMode = BuildMode.HOUSE; log.info("Build House");}
-            case KeyEvent.VK_6 -> {buildMode = BuildMode.NONE; log.info("NONE");}
+            case KeyEvent.VK_6 -> {buildMode = BuildMode.DELETE; log.info("Build Delete");}
         }
     }
 }

@@ -38,18 +38,6 @@ public class House extends GridObject{
     }
 
     @Override
-    public String getInfoTextBoxText(){
-        return """
-               HOUSE
-               Power demand: 10 kWh
-               Status: Consumer
-
-               Electricity must be delivered
-               through the power grid.
-               """;
-    }
-
-    @Override
     public String getTutorialText(){
         return """
                HOUSE
