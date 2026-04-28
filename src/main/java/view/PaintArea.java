@@ -1,6 +1,7 @@
 package view;
 
 import controller.BaseGame;
+import controller.Game;
 import lombok.extern.java.Log;
 
 import javax.swing.*;
@@ -10,9 +11,14 @@ import java.awt.event.*;
 @Log
 public class PaintArea extends JPanel{
     private BaseGame model;
+    private Game game;
 
     public PaintArea(BaseGame model){
         this.model = model;
+
+        if(model instanceof Game g){
+            this.game = g;
+        }
 
         addMouseListener(new MouseListener(){
             @Override
@@ -64,5 +70,17 @@ public class PaintArea extends JPanel{
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         model.draw(g2d);
+
+        if(game != null){
+            switch(game.getBuildModeName()){
+                case "POWER_PLANT" -> g2d.setColor(Color.RED);
+                case "HOUSE" -> g2d.setColor(Color.GREEN);
+                default -> g2d.setColor(Color.BLACK);
+            }
+
+            g2d.setFont(new Font("Arial", Font.BOLD, 16));
+
+            g2d.drawString("Mode: " + game.getBuildModeName().replace("_", " "), 10, 20);        }
     }
+
 }

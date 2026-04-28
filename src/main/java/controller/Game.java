@@ -35,6 +35,11 @@ public class Game extends BaseGame{
 
     private Grid grid;
 
+    public String getBuildModeName() {
+        if (this.buildMode == null) return "NONE";
+        return this.buildMode.name();
+    }
+
     private enum BuildMode { POWER_PLANT, TRANSFORMER, HOUSE, POWER_POLE, POWER_LINE, DELETE, NONE }
     private BuildMode buildMode = BuildMode.POWER_POLE;
     private GridObject firstSelectedObject = null;
@@ -100,74 +105,71 @@ public class Game extends BaseGame{
         GridObject objAtPos = grid.getObjectAt(gx, gy);
 
         switch(buildMode){
-            case POWER_POLE -> {
+            case POWER_POLE:
                 if(objAtPos == null){
                     GridObject placed = new PowerPole(gx, gy);
                     grid.addObject(placed);
                     showTutorialIfFirst(placed);
                 }
-            }
+                break;
 
-            case POWER_LINE -> {
+            case POWER_LINE:
                 if(objAtPos != null){
                     if(firstSelectedObject == null){
                         firstSelectedObject = objAtPos;
-                    }else{
+                    } else {
                         if(firstSelectedObject != objAtPos){
-                            try{
+                            try {
                                 GridObject placed = new PowerLine(firstSelectedObject, objAtPos);
                                 grid.addObject(placed);
                                 showTutorialIfFirst(placed);
-                            }catch(Exception ex){
+                            } catch(Exception ex) {
                                 ex.printStackTrace();
                             }
                         }
                         firstSelectedObject = null;
                     }
                 }
-            }
+                break;
 
-            case POWER_PLANT -> {
+            case POWER_PLANT:
                 if(objAtPos == null){
                     GridObject placed = new PowerPlant(gx, gy, 100);
                     grid.addObject(placed);
                     showTutorialIfFirst(placed);
                 }
-            }
+                break;
 
-            case TRANSFORMER -> {
+            case TRANSFORMER:
                 if(objAtPos == null){
                     GridObject placed = new Transformer(gx, gy);
                     grid.addObject(placed);
                     showTutorialIfFirst(placed);
                 }
-            }
+                break;
 
-            case HOUSE -> {
+            case HOUSE:
                 if(objAtPos == null){
                     GridObject placed = new House(gx, gy);
                     grid.addObject(placed);
                     showTutorialIfFirst(placed);
                 }
-            }
+                break;
 
-            case DELETE ->{
+            case DELETE:
                 if(objAtPos != null) grid.deleteObjectAt(gx, gy);
-            }
+                break;
 
-
-                case NONE -> {
+            case NONE:
                 selectedObject = grid.getObjectAt(gx, gy);
-
                 if(selectedObject != null && canShowInfo(selectedObject)){
-
                     infoTextBox.text = selectedObject.getInfoText();
                     infoTextBox.setVisible(!infoTextBox.isVisible());
-                }else{
+                } else {
                     infoTextBox.setVisible(false);
                     selectedObject = null;
                 }
-            }
+                break;
         }
     }
 
@@ -186,15 +188,9 @@ public class Game extends BaseGame{
             hoverTextBox.text = hoveredObject.getClass().getSimpleName() + "\n" + hoveredObject.getInfoText();
             hoverTextBox.setVisible(true);
             hoverTextBox.updatePosition(e.getX(), e.getY());
-        }else{
+        }
+        else{
             hoverTextBox.setVisible(false);
-            /*
-            case POWER_PLANT: if(objAtPos == null) grid.addObject(new PowerPlant(gx, gy, 100));
-            case TRANSFORMER: if(objAtPos == null) grid.addObject(new Transformer(gx, gy));
-            case HOUSE: if(objAtPos == null) grid.addObject(new House(gx, gy));
-            case DELETE: if(objAtPos != null) grid.deleteObjectAt(gx, gy);
-
-             */
         }
     }
 

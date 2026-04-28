@@ -21,7 +21,7 @@ public class House extends GridObject{
 
     @Override
     public void update(){
-
+        powered = currentPower >= powerDemand;
     }
 
     @Override

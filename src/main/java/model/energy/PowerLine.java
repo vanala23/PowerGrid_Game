@@ -26,6 +26,9 @@ public class PowerLine extends GridObject{
         }
         this.start = start;
         this.end = end;
+
+        this.start.addConnection(end);
+        this.end.addConnection(start);
     }
 
     public GridObject getStart() { return start; }
