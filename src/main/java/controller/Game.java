@@ -8,6 +8,8 @@ import model.energy.PowerPole;
 import model.energy.Transformer;
 import view.HoverTextBox;
 import view.InfoTextBox;
+import view.TutorialTextBox;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -17,12 +19,26 @@ import java.util.Random;
 public class Game extends BaseGame{
     private final int gridWidth = 20, gridHeight = 20;
     private final int tileSize = 32;
+    private boolean paused = false;
 
     private GridObject hoveredObject;
+    private GridObject selectedObject;
     private HoverTextBox hoverTextBox;
     private InfoTextBox infoTextBox;
+    private TutorialTextBox tutorialTextBox;
+
+    private boolean powerPlantTutorialShown = false;
+    private boolean houseTutorialShown = false;
+    private boolean transformerTutorialShown = false;
+    private boolean poleTutorialShown = false;
+    private boolean lineTutorialShown = false;
 
     private Grid grid;
+
+    public String getBuildModeName() {
+        if (this.buildMode == null) return "NONE";
+        return this.buildMode.name();
+    }
 
     private enum BuildMode { POWER_PLANT, TRANSFORMER, HOUSE, POWER_POLE, POWER_LINE, DELETE, NONE }
     private BuildMode buildMode = BuildMode.POWER_POLE;
@@ -41,10 +57,14 @@ public class Game extends BaseGame{
         hoverTextBox = new HoverTextBox("");
         hoverTextBox.setVisible(false);
         infoTextBox = new InfoTextBox("");
+        tutorialTextBox = new TutorialTextBox("");
+        tutorialTextBox.setVisible(false);
     }
 
     @Override
     public void update(){
+        if(paused) return;
+
         grid.update();
         grid.updatePower();
     }
@@ -59,15 +79,25 @@ public class Game extends BaseGame{
         }
 
         grid.drawAll(g2d);
-        if(hoverTextBox != null && !hoverTextBox.getClass().getSimpleName().equals("PowerLine"))
+
+        if(hoverTextBox != null && !(hoveredObject instanceof PowerLine))
             hoverTextBox.draw(g2d);
 
-        if(infoTextBox != null && (!infoTextBox.getClass().getSimpleName().equals("PowerLine") || !infoTextBox.getClass().getSimpleName().equals("PowerPole")))
+        if(infoTextBox != null && selectedObject != null && canShowInfo(selectedObject))
             infoTextBox.draw(g2d);
+
+        if(tutorialTextBox != null)
+            tutorialTextBox.draw(g2d);
     }
 
     @Override
     public void mouseClicked(MouseEvent e){
+        if(paused){
+            tutorialTextBox.setVisible(false);
+            paused = false;
+            return;
+        }
+
         int gx = e.getX() / tileSize;
         int gy = e.getY() / tileSize;
         if(gx < 0 || gy < 0 || gx >= gridWidth || gy >= gridHeight) return;
@@ -76,22 +106,24 @@ public class Game extends BaseGame{
 
         switch(buildMode){
             case POWER_POLE:
-                if(objAtPos == null) grid.addObject(new PowerPole(gx, gy));
+                if(objAtPos == null){
+                    GridObject placed = new PowerPole(gx, gy);
+                    grid.addObject(placed);
+                    showTutorialIfFirst(placed);
+                }
                 break;
 
             case POWER_LINE:
                 if(objAtPos != null){
                     if(firstSelectedObject == null){
                         firstSelectedObject = objAtPos;
-                    }else{
+                    } else {
                         if(firstSelectedObject != objAtPos){
-                            grid.addObject(new PowerLine(firstSelectedObject, objAtPos));
-
-                            try{
+                            try {
                                 GridObject placed = new PowerLine(firstSelectedObject, objAtPos);
                                 grid.addObject(placed);
                                 showTutorialIfFirst(placed);
-                            }catch(Exception ex){
+                            } catch(Exception ex) {
                                 ex.printStackTrace();
                             }
                         }
@@ -100,62 +132,49 @@ public class Game extends BaseGame{
                 }
                 break;
 
-            case POWER_PLANT: if(objAtPos == null) grid.addObject(new PowerPlant(gx, gy, 100));
-            case TRANSFORMER: if(objAtPos == null) grid.addObject(new Transformer(gx, gy));
-            case HOUSE: if(objAtPos == null) grid.addObject(new House(gx, gy));
-            case NONE:
-                GridObject clickedObject = grid.getObjectAt(gx, gy);
-
-                if(clickedObject != null){
-                    infoTextBox.text = clickedObject.getInfoText();
-                    if(infoTextBox.isVisible()){
-                        infoTextBox.setVisible(false);
-                    }else{
-                        infoTextBox.setVisible(true);
-                    }
-            }
-
-            case POWER_PLANT -> {
+            case POWER_PLANT:
                 if(objAtPos == null){
                     GridObject placed = new PowerPlant(gx, gy, 100);
                     grid.addObject(placed);
                     showTutorialIfFirst(placed);
                 }
-            }
+                break;
 
-            case TRANSFORMER -> {
+            case TRANSFORMER:
                 if(objAtPos == null){
                     GridObject placed = new Transformer(gx, gy);
                     grid.addObject(placed);
                     showTutorialIfFirst(placed);
                 }
-            }
+                break;
 
-            case HOUSE -> {
+            case HOUSE:
                 if(objAtPos == null){
                     GridObject placed = new House(gx, gy);
                     grid.addObject(placed);
                     showTutorialIfFirst(placed);
                 }
-            }
+                break;
 
-            case DELETE ->{
+            case DELETE:
                 if(objAtPos != null) grid.deleteObjectAt(gx, gy);
-            }
+                break;
 
-
-                case NONE -> {
+            case NONE:
                 selectedObject = grid.getObjectAt(gx, gy);
-
                 if(selectedObject != null && canShowInfo(selectedObject)){
-
                     infoTextBox.text = selectedObject.getInfoText();
                     infoTextBox.setVisible(!infoTextBox.isVisible());
-                }else{
+                } else {
                     infoTextBox.setVisible(false);
                     selectedObject = null;
                 }
+                break;
         }
+    }
+
+    private boolean canShowInfo(GridObject obj){
+        return !(obj instanceof PowerLine) && !(obj instanceof PowerPole);
     }
 
     @Override
@@ -169,15 +188,9 @@ public class Game extends BaseGame{
             hoverTextBox.text = hoveredObject.getClass().getSimpleName() + "\n" + hoveredObject.getInfoText();
             hoverTextBox.setVisible(true);
             hoverTextBox.updatePosition(e.getX(), e.getY());
-        }else{
+        }
+        else{
             hoverTextBox.setVisible(false);
-            /*
-            case POWER_PLANT: if(objAtPos == null) grid.addObject(new PowerPlant(gx, gy, 100));
-            case TRANSFORMER: if(objAtPos == null) grid.addObject(new Transformer(gx, gy));
-            case HOUSE: if(objAtPos == null) grid.addObject(new House(gx, gy));
-            case DELETE: if(objAtPos != null) grid.deleteObjectAt(gx, gy);
-
-             */
         }
     }
 
@@ -202,6 +215,43 @@ public class Game extends BaseGame{
             case KeyEvent.VK_5 -> {buildMode = BuildMode.HOUSE; log.info("Build House");}
             case KeyEvent.VK_6 -> {buildMode = BuildMode.DELETE; log.info("Build Delete");}
             case KeyEvent.VK_7 -> {buildMode = BuildMode.NONE; log.info("NONE");}
+        }
+    }
+
+    private void showTutorialIfFirst(GridObject obj){
+        if(obj instanceof PowerPlant && !powerPlantTutorialShown){
+            tutorialTextBox.text = obj.getTutorialText();
+            tutorialTextBox.setVisible(true);
+            powerPlantTutorialShown = true;
+            paused = true;
+        }
+
+        if(obj instanceof House && !houseTutorialShown){
+            tutorialTextBox.text = obj.getTutorialText();
+            tutorialTextBox.setVisible(true);
+            houseTutorialShown = true;
+            paused = true;
+        }
+
+        if(obj instanceof Transformer && !transformerTutorialShown){
+            tutorialTextBox.text = obj.getTutorialText();
+            tutorialTextBox.setVisible(true);
+            transformerTutorialShown = true;
+            paused = true;
+        }
+
+        if(obj instanceof PowerPole && !poleTutorialShown){
+            tutorialTextBox.text = obj.getTutorialText();
+            tutorialTextBox.setVisible(true);
+            poleTutorialShown = true;
+            paused = true;
+        }
+
+        if(obj instanceof PowerLine && !lineTutorialShown){
+            tutorialTextBox.text = obj.getTutorialText();
+            tutorialTextBox.setVisible(true);
+            lineTutorialShown = true;
+            paused = true;
         }
     }
 }

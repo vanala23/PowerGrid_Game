@@ -71,8 +71,6 @@ public class PaintArea extends JPanel{
         Graphics2D g2d = (Graphics2D) g;
         model.draw(g2d);
 
-        model.draw(g2d);
-
         if(game != null){
             switch(game.getBuildModeName()){
                 case "POWER_PLANT" -> g2d.setColor(Color.RED);
